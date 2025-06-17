@@ -8,6 +8,7 @@ public class SlidingWindowMain {
         int k=3;   //windowSize
         System.out.println(maxSumSubArray(list,k));
         System.out.println(firstNegativeNumberInEveryWindowOfSizeK(list,k));
+        System.out.println(countOccurrencesOfAnagrams("baaabacdasdaaaba","ab"));
     }
     private static long maxSumSubArray(List<Integer> list, int k) {
         long sum =0;
@@ -53,5 +54,37 @@ public class SlidingWindowMain {
             r++;
         }
         return answerList;
+    }
+
+    private static long countOccurrencesOfAnagrams(String s,String ana){
+        int ans=0;
+        int l=0;
+        int r=0;
+        Map<Character,Integer> freqMap = new HashMap<>();
+        int k=ana.length();
+        while(r<k){
+            freqMap.put(ana.charAt(r),freqMap.getOrDefault(ana.charAt(r),0)+1);
+            r++;
+        }
+        r=0;
+        Map<Character,Integer> windowMap = new HashMap<>();
+
+        while(r<s.length()){
+            windowMap.put(s.charAt(r),windowMap.getOrDefault(s.charAt(r),0)+1);
+            if(r-l+1==k){
+                if(freqMap.size()==windowMap.size() &&freqMap.equals(windowMap)){
+                    ans++;
+                }
+                if(windowMap.get(s.charAt(l))==1){
+                    windowMap.remove(s.charAt(l));
+                }else {
+                    windowMap.put(s.charAt(l), windowMap.get(s.charAt(l)) - 1);
+                }
+                l++;
+            }
+
+            r++;
+        }
+        return ans;
     }
 }
